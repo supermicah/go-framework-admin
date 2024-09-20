@@ -8,20 +8,20 @@ import (
 )
 
 var (
-	// Define aes secret key 2^5
+	// SecretKey Define aes secret key 2^5
 	SecretKey = []byte("2985BCFDB5FE43129843DB59825F8647")
 )
 
 func PKCS5Padding(plaintext []byte, blockSize int) []byte {
 	padding := blockSize - len(plaintext)%blockSize
-	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
-	return append(plaintext, padtext...)
+	padText := bytes.Repeat([]byte{byte(padding)}, padding)
+	return append(plaintext, padText...)
 }
 
 func PKCS5UnPadding(origData []byte) []byte {
 	length := len(origData)
-	unpadding := int(origData[length-1])
-	return origData[:(length - unpadding)]
+	unPadding := int(origData[length-1])
+	return origData[:(length - unPadding)]
 }
 
 func Encrypt(origData, key []byte) ([]byte, error) {
@@ -33,20 +33,20 @@ func Encrypt(origData, key []byte) ([]byte, error) {
 	blockSize := block.BlockSize()
 	origData = PKCS5Padding(origData, blockSize)
 	blockMode := cipher.NewCBCEncrypter(block, key[:blockSize])
-	crypted := make([]byte, len(origData))
-	blockMode.CryptBlocks(crypted, origData)
-	return crypted, nil
+	encrypted := make([]byte, len(origData))
+	blockMode.CryptBlocks(encrypted, origData)
+	return encrypted, nil
 }
 
 func EncryptToBase64(origData, key []byte) (string, error) {
-	crypted, err := Encrypt(origData, key)
+	encrypted, err := Encrypt(origData, key)
 	if err != nil {
 		return "", err
 	}
-	return base64.RawURLEncoding.EncodeToString(crypted), nil
+	return base64.RawURLEncoding.EncodeToString(encrypted), nil
 }
 
-func Decrypt(crypted, key []byte) ([]byte, error) {
+func Decrypt(encrypted, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -54,16 +54,16 @@ func Decrypt(crypted, key []byte) ([]byte, error) {
 
 	blockSize := block.BlockSize()
 	blockMode := cipher.NewCBCDecrypter(block, key[:blockSize])
-	origData := make([]byte, len(crypted))
-	blockMode.CryptBlocks(origData, crypted)
+	origData := make([]byte, len(encrypted))
+	blockMode.CryptBlocks(origData, encrypted)
 	origData = PKCS5UnPadding(origData)
 	return origData, nil
 }
 
 func DecryptFromBase64(data string, key []byte) ([]byte, error) {
-	crypted, err := base64.RawURLEncoding.DecodeString(data)
+	decrypted, err := base64.RawURLEncoding.DecodeString(data)
 	if err != nil {
 		return nil, err
 	}
-	return Decrypt(crypted, key)
+	return Decrypt(decrypted, key)
 }

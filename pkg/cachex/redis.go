@@ -6,6 +6,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/supermicah/go-framework-admin/pkg/errors"
+
 	"github.com/redis/go-redis/v9"
 )
 
@@ -16,7 +18,7 @@ type RedisConfig struct {
 	DB       int
 }
 
-// Create redis-based cache
+// NewRedisCache Create redis-based cache
 func NewRedisCache(cfg RedisConfig, opts ...Option) Cacher {
 	cli := redis.NewClient(&redis.Options{
 		Addr:     cfg.Addr,
@@ -28,12 +30,12 @@ func NewRedisCache(cfg RedisConfig, opts ...Option) Cacher {
 	return newRedisCache(cli, opts...)
 }
 
-// Use redis client create cache
+// NewRedisCacheWithClient Use redis client create cache
 func NewRedisCacheWithClient(cli *redis.Client, opts ...Option) Cacher {
 	return newRedisCache(cli, opts...)
 }
 
-// Use redis cluster client create cache
+// NewRedisCacheWithClusterClient Use redis cluster client create cache
 func NewRedisCacheWithClusterClient(cli *redis.ClusterClient, opts ...Option) Cacher {
 	return newRedisCache(cli, opts...)
 }
@@ -84,7 +86,7 @@ func (a *redisCache) Set(ctx context.Context, ns, key, value string, expiration 
 func (a *redisCache) Get(ctx context.Context, ns, key string) (string, bool, error) {
 	cmd := a.cli.Get(ctx, a.getKey(ns, key))
 	if err := cmd.Err(); err != nil {
-		if err == redis.Nil {
+		if errors.Is(err, redis.Nil) {
 			return "", false, nil
 		}
 		return "", false, err
@@ -109,7 +111,7 @@ func (a *redisCache) Delete(ctx context.Context, ns, key string) error {
 	}
 
 	cmd := a.cli.Del(ctx, a.getKey(ns, key))
-	if err := cmd.Err(); err != nil && err != redis.Nil {
+	if err := cmd.Err(); err != nil && !errors.Is(err, redis.Nil) {
 		return err
 	}
 	return nil
@@ -124,7 +126,7 @@ func (a *redisCache) GetAndDelete(ctx context.Context, ns, key string) (string, 
 	}
 
 	cmd := a.cli.Del(ctx, a.getKey(ns, key))
-	if err := cmd.Err(); err != nil && err != redis.Nil {
+	if err := cmd.Err(); err != nil && !errors.Is(err, redis.Nil) {
 		return "", false, err
 	}
 	return value, true, nil
@@ -133,7 +135,7 @@ func (a *redisCache) GetAndDelete(ctx context.Context, ns, key string) (string, 
 func (a *redisCache) Iterator(ctx context.Context, ns string, fn func(ctx context.Context, key, value string) bool) error {
 	var cursor uint64 = 0
 
-LB_LOOP:
+LbLoop:
 	for {
 		cmd := a.cli.Scan(ctx, cursor, a.getKey(ns, "*"), 100)
 		if err := cmd.Err(); err != nil {
@@ -148,13 +150,13 @@ LB_LOOP:
 		for _, key := range keys {
 			cmd := a.cli.Get(ctx, key)
 			if err := cmd.Err(); err != nil {
-				if err == redis.Nil {
+				if errors.Is(err, redis.Nil) {
 					continue
 				}
 				return err
 			}
 			if next := fn(ctx, strings.TrimPrefix(key, a.getKey(ns, "")), cmd.Val()); !next {
-				break LB_LOOP
+				break LbLoop
 			}
 		}
 
@@ -167,6 +169,6 @@ LB_LOOP:
 	return nil
 }
 
-func (a *redisCache) Close(ctx context.Context) error {
+func (a *redisCache) Close(_ context.Context) error {
 	return a.cli.Close()
 }

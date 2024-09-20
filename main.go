@@ -7,10 +7,10 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-// Usage: go build -ldflags "-X main.VERSION=x.x.x"
+// VERSION Usage: go build -ldflags "-X main.VERSION=x.x.x"
 var VERSION = "v1.0.0"
 
-// @title goframeworkadmin
+// @title go-framework-admin
 // @version v1.0.0
 // @description An API service based on golang.
 // @securityDefinitions.apikey ApiKeyAuth
@@ -20,7 +20,7 @@ var VERSION = "v1.0.0"
 // @basePath /
 func main() {
 	app := cli.NewApp()
-	app.Name = "goframeworkadmin"
+	app.Name = "go-framework-admin"
 	app.Version = VERSION
 	app.Usage = "An API service based on golang."
 	app.Commands = []*cli.Command{

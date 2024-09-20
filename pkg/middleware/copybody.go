@@ -6,9 +6,9 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/supermicah/go-framework-admin/pkg/errors"
 	"github.com/supermicah/go-framework-admin/pkg/util"
-	"github.com/gin-gonic/gin"
 )
 
 type CopyBodyConfig struct {
@@ -42,7 +42,7 @@ func CopyBodyWithConfig(config CopyBodyConfig) gin.HandlerFunc {
 		isGzip := false
 		safe := http.MaxBytesReader(c.Writer, c.Request.Body, config.MaxContentLen)
 		if c.GetHeader("Content-Encoding") == "gzip" {
-			if reader, ierr := gzip.NewReader(safe); ierr == nil {
+			if reader, errr := gzip.NewReader(safe); errr == nil {
 				isGzip = true
 				requestBody, err = io.ReadAll(reader)
 			}

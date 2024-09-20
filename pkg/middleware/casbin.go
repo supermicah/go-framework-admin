@@ -1,10 +1,10 @@
 package middleware
 
 import (
-	"github.com/supermicah/go-framework-admin/pkg/errors"
-	"github.com/supermicah/go-framework-admin/pkg/util"
 	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
+	"github.com/supermicah/go-framework-admin/pkg/errors"
+	"github.com/supermicah/go-framework-admin/pkg/util"
 )
 
 var ErrCasbinDenied = errors.Forbidden("com.casbin.denied", "Permission denied")

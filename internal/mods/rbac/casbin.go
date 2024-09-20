@@ -12,17 +12,17 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/casbin/casbin/v2"
 	"github.com/supermicah/go-framework-admin/internal/config"
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/dal"
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/schema"
 	"github.com/supermicah/go-framework-admin/pkg/cachex"
 	"github.com/supermicah/go-framework-admin/pkg/logging"
 	"github.com/supermicah/go-framework-admin/pkg/util"
-	"github.com/casbin/casbin/v2"
 	"go.uber.org/zap"
 )
 
-// Load rbac permissions to casbin
+// Casbinx Load rbac permissions to casbin
 type Casbinx struct {
 	enforcer        *atomic.Value `wire:"-"`
 	ticker          *time.Ticker  `wire:"-"`
@@ -82,14 +82,14 @@ func (a *Casbinx) load(ctx context.Context) error {
 	for i := 0; i < threadNum; i++ {
 		go func() {
 			defer wg.Done()
-			ibuf := new(bytes.Buffer)
+			buff := new(bytes.Buffer)
 			for item := range queue {
 				for _, res := range item.Resources {
-					_, _ = ibuf.WriteString(fmt.Sprintf("p, %s, %s, %s \n", item.RoleID, res.Path, res.Method))
+					_, _ = buff.WriteString(fmt.Sprintf("p, %s, %s, %s \n", item.RoleID, res.Path, res.Method))
 				}
 			}
 			lock.Lock()
-			_, _ = buf.Write(ibuf.Bytes())
+			_, _ = buf.Write(buff.Bytes())
 			lock.Unlock()
 		}()
 	}
