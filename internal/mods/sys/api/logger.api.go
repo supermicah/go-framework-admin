@@ -1,10 +1,10 @@
 package api
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/supermicah/go-framework-admin/internal/mods/sys/biz"
 	"github.com/supermicah/go-framework-admin/internal/mods/sys/schema"
 	"github.com/supermicah/go-framework-admin/pkg/util"
-	"github.com/gin-gonic/gin"
 )
 
 // Logger management
@@ -12,6 +12,7 @@ type Logger struct {
 	LoggerBIZ *biz.Logger
 }
 
+// Query
 // @Tags LoggerAPI
 // @Security ApiKeyAuth
 // @Summary Query logger list

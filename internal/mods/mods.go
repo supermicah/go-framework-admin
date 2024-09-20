@@ -3,17 +3,17 @@ package mods
 import (
 	"context"
 
-	"github.com/supermicah/go-framework-admin/internal/mods/rbac"
-	"github.com/supermicah/go-framework-admin/internal/mods/sys"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
+	"github.com/supermicah/go-framework-admin/internal/mods/rbac"
+	"github.com/supermicah/go-framework-admin/internal/mods/sys"
 )
 
 const (
 	apiPrefix = "/api/"
 )
 
-// Collection of wire providers
+// Set Collection of wire providers
 var Set = wire.NewSet(
 	wire.Struct(new(Mods), "*"),
 	rbac.Set,

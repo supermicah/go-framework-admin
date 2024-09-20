@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/LyricTian/captcha"
+	"github.com/gin-gonic/gin"
 	"github.com/supermicah/go-framework-admin/internal/config"
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/dal"
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/schema"
@@ -16,7 +17,6 @@ import (
 	"github.com/supermicah/go-framework-admin/pkg/jwtx"
 	"github.com/supermicah/go-framework-admin/pkg/logging"
 	"github.com/supermicah/go-framework-admin/pkg/util"
-	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
@@ -92,6 +92,7 @@ func (a *Login) ParseUserID(c *gin.Context) (string, error) {
 	return userID, nil
 }
 
+// GetCaptcha
 // This function generates a new captcha ID and returns it as a `schema.Captcha` struct. The length of
 // the captcha is determined by the `config.C.Util.Captcha.Length` configuration value.
 func (a *Login) GetCaptcha(ctx context.Context) (*schema.Captcha, error) {
@@ -100,6 +101,7 @@ func (a *Login) GetCaptcha(ctx context.Context) (*schema.Captcha, error) {
 	}, nil
 }
 
+// ResponseCaptcha
 // Response captcha image
 func (a *Login) ResponseCaptcha(ctx context.Context, w http.ResponseWriter, id string, reload bool) error {
 	if reload && !captcha.Reload(id) {
@@ -240,7 +242,7 @@ func (a *Login) Logout(ctx context.Context) error {
 	return nil
 }
 
-// Get user info
+// GetUserInfo Get user info
 func (a *Login) GetUserInfo(ctx context.Context) (*schema.User, error) {
 	if util.FromIsRootUser(ctx) {
 		return &schema.User{
@@ -276,7 +278,7 @@ func (a *Login) GetUserInfo(ctx context.Context) (*schema.User, error) {
 	return user, nil
 }
 
-// Change login password
+// UpdatePassword Change login password
 func (a *Login) UpdatePassword(ctx context.Context, updateItem *schema.UpdateLoginPassword) error {
 	if util.FromIsRootUser(ctx) {
 		return errors.BadRequest("", "Root user cannot change password")
@@ -307,7 +309,7 @@ func (a *Login) UpdatePassword(ctx context.Context, updateItem *schema.UpdateLog
 	return a.UserDAL.UpdatePasswordByID(ctx, userID, newPassword)
 }
 
-// Query menus based on user permissions
+// QueryMenus Query menus based on user permissions
 func (a *Login) QueryMenus(ctx context.Context) (schema.Menus, error) {
 	menuQueryParams := schema.MenuQueryParam{
 		Status: schema.MenuStatusEnabled,
@@ -352,7 +354,7 @@ func (a *Login) QueryMenus(ctx context.Context) (schema.Menus, error) {
 	return menuResult.Data.ToTree(), nil
 }
 
-// Update current user info
+// UpdateUser Update current user info
 func (a *Login) UpdateUser(ctx context.Context, updateItem *schema.UpdateCurrentUser) error {
 	if util.FromIsRootUser(ctx) {
 		return errors.BadRequest("", "Root user cannot update")

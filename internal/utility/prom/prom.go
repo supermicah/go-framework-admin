@@ -1,10 +1,10 @@
 package prom
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/supermicah/go-framework-admin/internal/config"
 	"github.com/supermicah/go-framework-admin/pkg/promx"
 	"github.com/supermicah/go-framework-admin/pkg/util"
-	"github.com/gin-gonic/gin"
 )
 
 var (

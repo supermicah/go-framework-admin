@@ -4,12 +4,12 @@ import (
 	"context"
 	"time"
 
+	"github.com/golang-jwt/jwt"
 	"github.com/supermicah/go-framework-admin/internal/config"
 	"github.com/supermicah/go-framework-admin/internal/mods"
 	"github.com/supermicah/go-framework-admin/pkg/cachex"
 	"github.com/supermicah/go-framework-admin/pkg/gormx"
 	"github.com/supermicah/go-framework-admin/pkg/jwtx"
-	"github.com/golang-jwt/jwt"
 	"gorm.io/gorm"
 )
 
@@ -20,7 +20,7 @@ type Injector struct {
 	M     *mods.Mods
 }
 
-// It creates a new database connection, and returns a function that closes the connection
+// InitDB It creates a new database connection, and returns a function that closes the connection
 func InitDB(ctx context.Context) (*gorm.DB, func(), error) {
 	cfg := config.C.Storage.DB
 
@@ -58,7 +58,7 @@ func InitDB(ctx context.Context) (*gorm.DB, func(), error) {
 	}, nil
 }
 
-// It returns a cachex.Cacher instance, a function to close the cache, and an error
+// InitCacher It returns a cachex.Cacher instance, a function to close the cache, and an error
 func InitCacher(ctx context.Context) (cachex.Cacher, func(), error) {
 	cfg := config.C.Storage.Cache
 

@@ -1,10 +1,10 @@
 package api
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/biz"
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/schema"
 	"github.com/supermicah/go-framework-admin/pkg/util"
-	"github.com/gin-gonic/gin"
 )
 
 // User management for RBAC
@@ -12,6 +12,7 @@ type User struct {
 	UserBIZ *biz.User
 }
 
+// Query
 // @Tags UserAPI
 // @Security ApiKeyAuth
 // @Summary Query user list
@@ -40,6 +41,7 @@ func (a *User) Query(c *gin.Context) {
 	util.ResPage(c, result.Data, result.PageResult)
 }
 
+// Get
 // @Tags UserAPI
 // @Security ApiKeyAuth
 // @Summary Get user record by ID
@@ -58,10 +60,11 @@ func (a *User) Get(c *gin.Context) {
 	util.ResSuccess(c, item)
 }
 
+// Create
 // @Tags UserAPI
 // @Security ApiKeyAuth
 // @Summary Create user record
-// @Param body body schema.UserForm true "Request body"
+// @Param body schema.UserForm true "Request body"
 // @Success 200 {object} util.ResponseResult{data=schema.User}
 // @Failure 400 {object} util.ResponseResult
 // @Failure 401 {object} util.ResponseResult
@@ -86,11 +89,12 @@ func (a *User) Create(c *gin.Context) {
 	util.ResSuccess(c, result)
 }
 
+// Update
 // @Tags UserAPI
 // @Security ApiKeyAuth
 // @Summary Update user record by ID
 // @Param id path string true "unique id"
-// @Param body body schema.UserForm true "Request body"
+// @Param body schema.UserForm true "Request body"
 // @Success 200 {object} util.ResponseResult
 // @Failure 400 {object} util.ResponseResult
 // @Failure 401 {object} util.ResponseResult
@@ -115,6 +119,7 @@ func (a *User) Update(c *gin.Context) {
 	util.ResOK(c)
 }
 
+// Delete
 // @Tags UserAPI
 // @Security ApiKeyAuth
 // @Summary Delete user record by ID
@@ -133,6 +138,7 @@ func (a *User) Delete(c *gin.Context) {
 	util.ResOK(c)
 }
 
+// ResetPassword
 // @Tags UserAPI
 // @Security ApiKeyAuth
 // @Summary Reset user password by ID
