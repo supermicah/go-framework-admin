@@ -2007,7 +2007,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "goframeworkadmin",
+	Title:            "go-framework-admin",
 	Description:      "An API service based on golang.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

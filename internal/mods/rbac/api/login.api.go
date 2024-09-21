@@ -46,7 +46,7 @@ func (a *Login) ResponseCaptcha(c *gin.Context) {
 // Login
 // @Tags LoginAPI
 // @Summary Login system with username and password
-// @Param body schema.LoginForm true "Request body"
+// @Param body body schema.LoginForm true "Request body"
 // @Success 200 {object} util.ResponseResult{data=schema.LoginToken}
 // @Failure 400 {object} util.ResponseResult
 // @Failure 500 {object} util.ResponseResult
@@ -124,7 +124,7 @@ func (a *Login) GetUserInfo(c *gin.Context) {
 // @Tags LoginAPI
 // @Security ApiKeyAuth
 // @Summary Change current user password
-// @Param body schema.UpdateLoginPassword true "Request body"
+// @Param body body schema.UpdateLoginPassword true "Request body"
 // @Success 200 {object} util.ResponseResult
 // @Failure 400 {object} util.ResponseResult
 // @Failure 401 {object} util.ResponseResult
@@ -168,7 +168,7 @@ func (a *Login) QueryMenus(c *gin.Context) {
 // @Tags LoginAPI
 // @Security ApiKeyAuth
 // @Summary Update current user info
-// @Param body schema.UpdateCurrentUser true "Request body"
+// @Param body body schema.UpdateCurrentUser true "Request body"
 // @Success 200 {object} util.ResponseResult
 // @Failure 400 {object} util.ResponseResult
 // @Failure 401 {object} util.ResponseResult

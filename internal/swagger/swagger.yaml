@@ -432,7 +432,7 @@ definitions:
 info:
   contact: {}
   description: An API service based on golang.
-  title: goframeworkadmin
+  title: go-framework-admin
   version: v1.0.0
 paths:
   /api/v1/captcha/id:

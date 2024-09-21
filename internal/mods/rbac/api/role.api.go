@@ -63,7 +63,7 @@ func (a *Role) Get(c *gin.Context) {
 // @Tags RoleAPI
 // @Security ApiKeyAuth
 // @Summary Create role record
-// @Param body schema.RoleForm true "Request body"
+// @Param body body schema.RoleForm true "Request body"
 // @Success 200 {object} util.ResponseResult{data=schema.Role}
 // @Failure 400 {object} util.ResponseResult
 // @Failure 401 {object} util.ResponseResult

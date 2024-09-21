@@ -64,7 +64,7 @@ func (a *User) Get(c *gin.Context) {
 // @Tags UserAPI
 // @Security ApiKeyAuth
 // @Summary Create user record
-// @Param body schema.UserForm true "Request body"
+// @Param body body schema.UserForm true "Request body"
 // @Success 200 {object} util.ResponseResult{data=schema.User}
 // @Failure 400 {object} util.ResponseResult
 // @Failure 401 {object} util.ResponseResult
@@ -94,7 +94,7 @@ func (a *User) Create(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Summary Update user record by ID
 // @Param id path string true "unique id"
-// @Param body schema.UserForm true "Request body"
+// @Param body body schema.UserForm true "Request body"
 // @Success 200 {object} util.ResponseResult
 // @Failure 400 {object} util.ResponseResult
 // @Failure 401 {object} util.ResponseResult

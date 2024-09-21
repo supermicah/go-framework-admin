@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "An API service based on golang.",
-        "title": "goframeworkadmin",
+        "title": "go-framework-admin",
         "contact": {},
         "version": "v1.0.0"
     },
