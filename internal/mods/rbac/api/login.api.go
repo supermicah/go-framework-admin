@@ -46,7 +46,7 @@ func (a *Login) ResponseCaptcha(c *gin.Context) {
 // Login
 // @Tags LoginAPI
 // @Summary Login system with username and password
-// @Param body body schema.LoginForm true "Request body"
+// @Param body schema.LoginForm true "Request body"
 // @Success 200 {object} util.ResponseResult{data=schema.LoginToken}
 // @Failure 400 {object} util.ResponseResult
 // @Failure 500 {object} util.ResponseResult
