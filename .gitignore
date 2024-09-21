@@ -29,3 +29,6 @@ tmp
 # IDE configs
 .idea
 .vscode
+
+# local
+configs/local

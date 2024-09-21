@@ -34,7 +34,7 @@ Delimiter = ":"
 CleanupInterval = 60
 
 [Storage.Cache.Badger]
-Path = "data/cache"
+Path = "/Users/micah/Local/Project/Temp/go-framework-admin/data/cache"
 
 [Storage.Cache.Redis]
 Addr = "127.0.0.1:6379"
@@ -45,11 +45,11 @@ DB = 1
 [Storage.DB]
 Debug = true
 # SQLite3 DSN
-Type = "sqlite3" # sqlite3/mysql/postgres
-DSN = "data/goframeworkadmin.db"
+# Type = "sqlite3" # sqlite3/mysql/postgres
+# DSN = "/Users/micah/Local/Project/Temp/go-framework-admin/data/goframeworkadmin.db"
 # MySQL DSN
-# Type = "mysql" # sqlite3/mysql/postgres
-# DSN = "root:123@tcp(127.0.0.1:3306)/goframeworkadmin?charset=utf8mb4&parseTime=True&loc=Local"
+Type = "mysql" # sqlite3/mysql/postgres
+DSN = "root:Sjpmysql05.@tcp(10.10.10.239:3306)/goframeworkadmin?charset=utf8mb4&parseTime=True&loc=Local"
 # PostgreSQL DSN
 # Type = "postgres" # sqlite3/mysql/postgres
 # DSN = "host=db user=postgres password=123456 dbname=goframeworkadmin port=5432 sslmode=disable TimeZone=Asia/Shanghai"
@@ -69,7 +69,7 @@ Height = 160
 CacheType = "memory" # memory/redis
 
 [Util.Captcha.Redis]
-Addr = "" # If empty, then use the same configuration as Storage.Cache.Redis
+Addr = "10.10.10.239" # If empty, then use the same configuration as Storage.Cache.Redis
 Username = ""
 Password = ""
 DB = 1
