@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/biz"
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/schema"
 	"github.com/supermicah/go-framework-admin/pkg/util"
@@ -52,7 +53,7 @@ func (a *User) Query(c *gin.Context) {
 // @Router /api/v1/users/{id} [get]
 func (a *User) Get(c *gin.Context) {
 	ctx := c.Request.Context()
-	item, err := a.UserBIZ.Get(ctx, c.Param("id"))
+	item, err := a.UserBIZ.Get(ctx, util.GetInt64Param(c, "id"))
 	if err != nil {
 		util.ResError(c, err)
 		return
@@ -111,7 +112,7 @@ func (a *User) Update(c *gin.Context) {
 		return
 	}
 
-	err := a.UserBIZ.Update(ctx, c.Param("id"), item)
+	err := a.UserBIZ.Update(ctx, util.GetInt64Param(c, "id"), item)
 	if err != nil {
 		util.ResError(c, err)
 		return
@@ -130,7 +131,7 @@ func (a *User) Update(c *gin.Context) {
 // @Router /api/v1/users/{id} [delete]
 func (a *User) Delete(c *gin.Context) {
 	ctx := c.Request.Context()
-	err := a.UserBIZ.Delete(ctx, c.Param("id"))
+	err := a.UserBIZ.Delete(ctx, util.GetInt64Param(c, "id"))
 	if err != nil {
 		util.ResError(c, err)
 		return
@@ -149,7 +150,7 @@ func (a *User) Delete(c *gin.Context) {
 // @Router /api/v1/users/{id}/reset-pwd [patch]
 func (a *User) ResetPassword(c *gin.Context) {
 	ctx := c.Request.Context()
-	err := a.UserBIZ.ResetPassword(ctx, c.Param("id"))
+	err := a.UserBIZ.ResetPassword(ctx, util.GetInt64Param(c, "id"))
 	if err != nil {
 		util.ResError(c, err)
 		return

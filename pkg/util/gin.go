@@ -4,14 +4,16 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	"go.uber.org/zap"
+
 	"github.com/supermicah/go-framework-admin/pkg/encoding/json"
 	"github.com/supermicah/go-framework-admin/pkg/errors"
 	"github.com/supermicah/go-framework-admin/pkg/logging"
-	"go.uber.org/zap"
 )
 
 // GetToken Get access token from header or query parameter
@@ -41,6 +43,16 @@ func GetBodyData(c *gin.Context) []byte {
 		}
 	}
 	return nil
+}
+
+// GetInt64Param Get int64 value from context
+func GetInt64Param(c *gin.Context, key string) int64 {
+	keyStr := c.Param(key)
+	valueInt64, err := strconv.ParseInt(keyStr, 10, 64)
+	if err != nil {
+		return -1
+	}
+	return valueInt64
 }
 
 // ParseJSON Parse body json data to struct

@@ -13,13 +13,14 @@ import (
 	"time"
 
 	"github.com/casbin/casbin/v2"
+	"go.uber.org/zap"
+
 	"github.com/supermicah/go-framework-admin/internal/config"
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/dal"
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/schema"
 	"github.com/supermicah/go-framework-admin/pkg/cachex"
 	"github.com/supermicah/go-framework-admin/pkg/logging"
 	"github.com/supermicah/go-framework-admin/pkg/util"
-	"go.uber.org/zap"
 )
 
 // Casbinx Load rbac permissions to casbin
@@ -40,7 +41,7 @@ func (a *Casbinx) GetEnforcer() *casbin.Enforcer {
 }
 
 type policyQueueItem struct {
-	RoleID    string
+	RoleID    int64
 	Resources schema.MenuResources
 }
 
@@ -139,7 +140,7 @@ func (a *Casbinx) load(ctx context.Context) error {
 	return nil
 }
 
-func (a *Casbinx) queryRoleResources(ctx context.Context, roleID string) (schema.MenuResources, error) {
+func (a *Casbinx) queryRoleResources(ctx context.Context, roleID int64) (schema.MenuResources, error) {
 	menuResult, err := a.MenuDAL.Query(ctx, schema.MenuQueryParam{
 		RoleID: roleID,
 		Status: schema.MenuStatusEnabled,
@@ -154,8 +155,8 @@ func (a *Casbinx) queryRoleResources(ctx context.Context, roleID string) (schema
 		return nil, nil
 	}
 
-	menuIDs := make([]string, 0, len(menuResult.Data))
-	menuIDMapper := make(map[string]struct{})
+	menuIDs := make([]int64, 0, len(menuResult.Data))
+	menuIDMapper := make(map[int64]struct{})
 	for _, item := range menuResult.Data {
 		if _, ok := menuIDMapper[item.ID]; ok {
 			continue
@@ -167,11 +168,16 @@ func (a *Casbinx) queryRoleResources(ctx context.Context, roleID string) (schema
 				if pid == "" {
 					continue
 				}
-				if _, ok := menuIDMapper[pid]; ok {
+				parentID, err := strconv.ParseInt(pid, 10, 64)
+				if err != nil {
+					logging.Context(ctx).Error("Failed to parse pid value", zap.Error(err), zap.String("pid", pid))
 					continue
 				}
-				menuIDs = append(menuIDs, pid)
-				menuIDMapper[pid] = struct{}{}
+				if _, ok := menuIDMapper[parentID]; ok {
+					continue
+				}
+				menuIDs = append(menuIDs, parentID)
+				menuIDMapper[parentID] = struct{}{}
 			}
 		}
 	}

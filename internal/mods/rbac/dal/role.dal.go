@@ -3,10 +3,11 @@ package dal
 import (
 	"context"
 
+	"gorm.io/gorm"
+
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/schema"
 	"github.com/supermicah/go-framework-admin/pkg/errors"
 	"github.com/supermicah/go-framework-admin/pkg/util"
-	"gorm.io/gorm"
 )
 
 // GetRoleDB Get role storage instance
@@ -54,7 +55,7 @@ func (a *Role) Query(ctx context.Context, params schema.RoleQueryParam, opts ...
 }
 
 // Get the specified role from the database.
-func (a *Role) Get(ctx context.Context, id string, opts ...schema.RoleQueryOptions) (*schema.Role, error) {
+func (a *Role) Get(ctx context.Context, id int64, opts ...schema.RoleQueryOptions) (*schema.Role, error) {
 	var opt schema.RoleQueryOptions
 	if len(opts) > 0 {
 		opt = opts[0]
@@ -71,7 +72,7 @@ func (a *Role) Get(ctx context.Context, id string, opts ...schema.RoleQueryOptio
 }
 
 // Exists checks if the specified role exists in the database.
-func (a *Role) Exists(ctx context.Context, id string) (bool, error) {
+func (a *Role) Exists(ctx context.Context, id int64) (bool, error) {
 	ok, err := util.Exists(ctx, GetRoleDB(ctx, a.DB).Where("id=?", id))
 	return ok, errors.WithStack(err)
 }
@@ -94,7 +95,7 @@ func (a *Role) Update(ctx context.Context, item *schema.Role) error {
 }
 
 // Delete the specified role from the database.
-func (a *Role) Delete(ctx context.Context, id string) error {
+func (a *Role) Delete(ctx context.Context, id int64) error {
 	result := GetRoleDB(ctx, a.DB).Where("id=?", id).Delete(new(schema.Role))
 	return errors.WithStack(result.Error)
 }

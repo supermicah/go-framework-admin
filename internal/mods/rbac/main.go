@@ -5,12 +5,13 @@ import (
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
+	"gorm.io/gorm"
+
 	"github.com/supermicah/go-framework-admin/internal/config"
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/api"
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/schema"
 	"github.com/supermicah/go-framework-admin/pkg/logging"
-	"go.uber.org/zap"
-	"gorm.io/gorm"
 )
 
 type RBAC struct {

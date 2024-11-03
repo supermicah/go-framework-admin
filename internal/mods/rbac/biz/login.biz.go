@@ -2,12 +2,16 @@ package biz
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"sort"
+	"strconv"
 	"time"
 
 	"github.com/LyricTian/captcha"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
+
 	"github.com/supermicah/go-framework-admin/internal/config"
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/dal"
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/schema"
@@ -17,8 +21,9 @@ import (
 	"github.com/supermicah/go-framework-admin/pkg/jwtx"
 	"github.com/supermicah/go-framework-admin/pkg/logging"
 	"github.com/supermicah/go-framework-admin/pkg/util"
-	"go.uber.org/zap"
 )
+
+const illegalUserID = -1
 
 // Login management for RBAC
 type Login struct {
@@ -30,7 +35,7 @@ type Login struct {
 	UserBIZ     *User
 }
 
-func (a *Login) ParseUserID(c *gin.Context) (string, error) {
+func (a *Login) ParseUserID(c *gin.Context) (int64, error) {
 	rootID := config.C.General.Root.ID
 	if config.C.Middleware.Auth.Disable {
 		return rootID, nil
@@ -39,26 +44,31 @@ func (a *Login) ParseUserID(c *gin.Context) (string, error) {
 	invalidToken := errors.Unauthorized(config.ErrInvalidTokenID, "Invalid access token")
 	token := util.GetToken(c)
 	if token == "" {
-		return "", invalidToken
+		return illegalUserID, invalidToken
 	}
 
 	ctx := c.Request.Context()
 	ctx = util.NewUserToken(ctx, token)
 
-	userID, err := a.Auth.ParseSubject(ctx, token)
+	userIDStr, err := a.Auth.ParseSubject(ctx, token)
 	if err != nil {
-		if err == jwtx.ErrInvalidToken {
-			return "", invalidToken
+		if errors.Is(err, jwtx.ErrInvalidToken) {
+			return illegalUserID, invalidToken
 		}
-		return "", err
-	} else if userID == rootID {
+		return illegalUserID, err
+	}
+	userID, err := strconv.ParseInt(userIDStr, 10, 64)
+	if err != nil {
+		return illegalUserID, err
+	}
+	if userID == rootID {
 		c.Request = c.Request.WithContext(util.NewIsRootUser(ctx))
 		return userID, nil
 	}
 
-	userCacheVal, ok, err := a.Cache.Get(ctx, config.CacheNSForUser, userID)
+	userCacheVal, ok, err := a.Cache.Get(ctx, config.CacheNSForUser, fmt.Sprintf("%d", userID))
 	if err != nil {
-		return "", err
+		return illegalUserID, err
 	} else if ok {
 		userCache := util.ParseUserCache(userCacheVal)
 		c.Request = c.Request.WithContext(util.NewUserCache(ctx, userCache))
@@ -70,22 +80,22 @@ func (a *Login) ParseUserID(c *gin.Context) (string, error) {
 		QueryOptions: util.QueryOptions{SelectFields: []string{"status"}},
 	})
 	if err != nil {
-		return "", err
+		return illegalUserID, err
 	} else if user == nil || user.Status != schema.UserStatusActivated {
-		return "", invalidToken
+		return illegalUserID, invalidToken
 	}
 
 	roleIDs, err := a.UserBIZ.GetRoleIDs(ctx, userID)
 	if err != nil {
-		return "", err
+		return illegalUserID, err
 	}
 
 	userCache := util.UserCache{
 		RoleIDs: roleIDs,
 	}
-	err = a.Cache.Set(ctx, config.CacheNSForUser, userID, userCache.String())
+	err = a.Cache.Set(ctx, config.CacheNSForUser, fmt.Sprintf("%d", userID), userCache.String())
 	if err != nil {
-		return "", err
+		return illegalUserID, err
 	}
 
 	c.Request = c.Request.WithContext(util.NewUserCache(ctx, userCache))
@@ -123,8 +133,8 @@ func (a *Login) ResponseCaptcha(ctx context.Context, w http.ResponseWriter, id s
 	return nil
 }
 
-func (a *Login) genUserToken(ctx context.Context, userID string) (*schema.LoginToken, error) {
-	token, err := a.Auth.GenerateToken(ctx, userID)
+func (a *Login) genUserToken(ctx context.Context, userID int64) (*schema.LoginToken, error) {
+	token, err := a.Auth.GenerateToken(ctx, fmt.Sprintf("%d", userID))
 	if err != nil {
 		return nil, err
 	}
@@ -191,7 +201,7 @@ func (a *Login) Login(ctx context.Context, formItem *schema.LoginForm) (*schema.
 	}
 
 	userCache := util.UserCache{RoleIDs: roleIDs}
-	err = a.Cache.Set(ctx, config.CacheNSForUser, userID, userCache.String(),
+	err = a.Cache.Set(ctx, config.CacheNSForUser, fmt.Sprintf("%d", userID), userCache.String(),
 		time.Duration(config.C.Dictionary.UserCacheExp)*time.Hour)
 	if err != nil {
 		logging.Context(ctx).Error("Failed to set cache", zap.Error(err))
@@ -233,7 +243,7 @@ func (a *Login) Logout(ctx context.Context) error {
 	}
 
 	userID := util.FromUserID(ctx)
-	err := a.Cache.Delete(ctx, config.CacheNSForUser, userID)
+	err := a.Cache.Delete(ctx, config.CacheNSForUser, fmt.Sprintf("%d", userID))
 	if err != nil {
 		logging.Context(ctx).Error("Failed to delete user cache", zap.Error(err))
 	}
@@ -332,7 +342,7 @@ func (a *Login) QueryMenus(ctx context.Context) (schema.Menus, error) {
 
 	// fill parent menus
 	if parentIDs := menuResult.Data.SplitParentIDs(); len(parentIDs) > 0 {
-		var missMenusIDs []string
+		var missMenusIDs []int64
 		menuIDMapper := menuResult.Data.ToMap()
 		for _, parentID := range parentIDs {
 			if _, ok := menuIDMapper[parentID]; !ok {

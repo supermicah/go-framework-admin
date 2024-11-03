@@ -3,10 +3,11 @@ package dal
 import (
 	"context"
 
+	"gorm.io/gorm"
+
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/schema"
 	"github.com/supermicah/go-framework-admin/pkg/errors"
 	"github.com/supermicah/go-framework-admin/pkg/util"
-	"gorm.io/gorm"
 )
 
 // GetMenuResourceDB Get menu resource storage instance
@@ -27,7 +28,7 @@ func (a *MenuResource) Query(ctx context.Context, params schema.MenuResourceQuer
 	}
 
 	db := GetMenuResourceDB(ctx, a.DB)
-	if v := params.MenuID; len(v) > 0 {
+	if v := params.MenuID; v > 0 {
 		db = db.Where("menu_id = ?", v)
 	}
 	if v := params.MenuIDs; len(v) > 0 {
@@ -65,13 +66,13 @@ func (a *MenuResource) Get(ctx context.Context, id string, opts ...schema.MenuRe
 }
 
 // Exists Exist checks if the specified menu resource exists in the database.
-func (a *MenuResource) Exists(ctx context.Context, id string) (bool, error) {
+func (a *MenuResource) Exists(ctx context.Context, id int64) (bool, error) {
 	ok, err := util.Exists(ctx, GetMenuResourceDB(ctx, a.DB).Where("id=?", id))
 	return ok, errors.WithStack(err)
 }
 
 // ExistsMethodPathByMenuID checks if the specified menu resource exists in the database.
-func (a *MenuResource) ExistsMethodPathByMenuID(ctx context.Context, method, path, menuID string) (bool, error) {
+func (a *MenuResource) ExistsMethodPathByMenuID(ctx context.Context, method, path string, menuID int64) (bool, error) {
 	ok, err := util.Exists(ctx, GetMenuResourceDB(ctx, a.DB).Where("method=? AND path=? AND menu_id=?", method, path, menuID))
 	return ok, errors.WithStack(err)
 }
@@ -95,7 +96,7 @@ func (a *MenuResource) Delete(ctx context.Context, id string) error {
 }
 
 // DeleteByMenuID Deletes the menu resource by menu id.
-func (a *MenuResource) DeleteByMenuID(ctx context.Context, menuID string) error {
+func (a *MenuResource) DeleteByMenuID(ctx context.Context, menuID int64) error {
 	result := GetMenuResourceDB(ctx, a.DB).Where("menu_id=?", menuID).Delete(new(schema.MenuResource))
 	return errors.WithStack(result.Error)
 }

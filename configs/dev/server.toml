@@ -6,7 +6,7 @@ PprofAddr = "" # Pprof monitor address, "localhost:6060"
 DisableSwagger = false
 DisablePrintConfig = false
 DefaultLoginPwd = "6351623c8cef86fefabfa7da046fc619" # MD5("abc-123")
-MenuFile = "menu.json" # Or use "menu_cn.json"
+MenuFile = "menu.json" # Or use "menu_en.json"
 DenyDeleteMenu = false
 
 [General.HTTP]

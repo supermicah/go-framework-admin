@@ -5,12 +5,13 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
+	"gorm.io/gorm"
+
 	"github.com/supermicah/go-framework-admin/internal/config"
 	"github.com/supermicah/go-framework-admin/internal/mods"
 	"github.com/supermicah/go-framework-admin/pkg/cachex"
 	"github.com/supermicah/go-framework-admin/pkg/gormx"
 	"github.com/supermicah/go-framework-admin/pkg/jwtx"
-	"gorm.io/gorm"
 )
 
 type Injector struct {

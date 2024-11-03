@@ -17,7 +17,7 @@ type Config struct {
 }
 
 type General struct {
-	AppName            string `default:"goframeworkadmin"`
+	AppName            string `default:"go-framework-admin"`
 	Version            string `default:"v1.0.0"`
 	Debug              bool
 	PprofAddr          string
@@ -37,10 +37,10 @@ type General struct {
 		KeyFile         string
 	}
 	Root struct {
-		ID       string `default:"root"`
+		ID       int64  `default:"1"`
 		Username string `default:"admin"`
 		Password string
-		Name     string `default:"Admin"`
+		Name     string `default:"Admin"` // displayName
 	}
 }
 
@@ -63,12 +63,12 @@ type Storage struct {
 	}
 	DB struct {
 		Debug        bool
-		Type         string `default:"sqlite3"`                  // sqlite3/mysql/postgres
-		DSN          string `default:"data/goframeworkadmin.db"` // database source name
-		MaxLifetime  int    `default:"86400"`                    // seconds
-		MaxIdleTime  int    `default:"3600"`                     // seconds
-		MaxOpenConns int    `default:"100"`                      // connections
-		MaxIdleConns int    `default:"50"`                       // connections
+		Type         string `default:"sqlite3"`                    // sqlite3/mysql/postgres
+		DSN          string `default:"data/go-framework-admin.db"` // database source name
+		MaxLifetime  int    `default:"86400"`                      // seconds
+		MaxIdleTime  int    `default:"3600"`                       // seconds
+		MaxOpenConns int    `default:"100"`                        // connections
+		MaxIdleConns int    `default:"50"`                         // connections
 		TablePrefix  string `default:""`
 		AutoMigrate  bool
 		PrepareStmt  bool

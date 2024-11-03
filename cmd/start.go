@@ -8,9 +8,10 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/urfave/cli/v2"
+
 	"github.com/supermicah/go-framework-admin/internal/bootstrap"
 	"github.com/supermicah/go-framework-admin/internal/config"
-	"github.com/urfave/cli/v2"
 )
 
 // StartCmd The function defines a CLI command to start a server with various flags and options, including the

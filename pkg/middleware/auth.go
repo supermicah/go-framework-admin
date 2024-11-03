@@ -1,17 +1,18 @@
 package middleware
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"github.com/supermicah/go-framework-admin/pkg/logging"
 	"github.com/supermicah/go-framework-admin/pkg/util"
-	"github.com/gin-gonic/gin"
 )
 
 type AuthConfig struct {
 	AllowedPathPrefixes []string
 	SkippedPathPrefixes []string
-	RootID              string
+	RootID              int64
 	Skipper             func(c *gin.Context) bool
-	ParseUserID         func(c *gin.Context) (string, error)
+	ParseUserID         func(c *gin.Context) (int64, error)
 }
 
 func AuthWithConfig(config AuthConfig) gin.HandlerFunc {

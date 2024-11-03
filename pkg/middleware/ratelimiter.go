@@ -2,17 +2,19 @@ package middleware
 
 import (
 	"context"
+	"fmt"
 	"time"
 
-	"github.com/supermicah/go-framework-admin/pkg/errors"
-	"github.com/supermicah/go-framework-admin/pkg/logging"
-	"github.com/supermicah/go-framework-admin/pkg/util"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"github.com/go-redis/redis_rate/v9"
 	"github.com/patrickmn/go-cache"
 	"go.uber.org/zap"
 	"golang.org/x/time/rate"
+
+	"github.com/supermicah/go-framework-admin/pkg/errors"
+	"github.com/supermicah/go-framework-admin/pkg/logging"
+	"github.com/supermicah/go-framework-admin/pkg/util"
 )
 
 type RateLimiterConfig struct {
@@ -53,8 +55,8 @@ func RateLimiterWithConfig(config RateLimiterConfig) gin.HandlerFunc {
 		)
 
 		ctx := c.Request.Context()
-		if userID := util.FromUserID(ctx); userID != "" {
-			allowed, err = store.Allow(ctx, userID, time.Second*time.Duration(config.Period), config.MaxRequestsPerUser)
+		if userID := util.FromUserID(ctx); userID > 0 {
+			allowed, err = store.Allow(ctx, fmt.Sprintf("%d", userID), time.Second*time.Duration(config.Period), config.MaxRequestsPerUser)
 		} else {
 			allowed, err = store.Allow(ctx, c.ClientIP(), time.Second*time.Duration(config.Period), config.MaxRequestsPerIP)
 		}

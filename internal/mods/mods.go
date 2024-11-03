@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
+
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac"
 	"github.com/supermicah/go-framework-admin/internal/mods/sys"
 )

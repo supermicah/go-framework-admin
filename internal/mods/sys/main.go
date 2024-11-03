@@ -4,9 +4,10 @@ import (
 	"context"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+
 	"github.com/supermicah/go-framework-admin/internal/config"
 	"github.com/supermicah/go-framework-admin/internal/mods/sys/api"
-	"gorm.io/gorm"
 )
 
 type SYS struct {

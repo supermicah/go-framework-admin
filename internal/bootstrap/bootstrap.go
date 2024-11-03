@@ -8,13 +8,14 @@ import (
 	"os"
 	"strings"
 
+	"go.uber.org/zap"
+
 	"github.com/supermicah/go-framework-admin/internal/config"
 	_ "github.com/supermicah/go-framework-admin/internal/swagger"
 	"github.com/supermicah/go-framework-admin/internal/utility/prom"
 	"github.com/supermicah/go-framework-admin/internal/wirex"
 	"github.com/supermicah/go-framework-admin/pkg/logging"
 	"github.com/supermicah/go-framework-admin/pkg/util"
-	"go.uber.org/zap"
 )
 
 // RunConfig defines the config for run command.

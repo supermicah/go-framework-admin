@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 
+	"gorm.io/gorm"
+
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/schema"
 	"github.com/supermicah/go-framework-admin/pkg/errors"
 	"github.com/supermicah/go-framework-admin/pkg/util"
-	"gorm.io/gorm"
 )
 
 // GetUserRoleDB Get user role storage instance
@@ -36,10 +37,10 @@ func (a *UserRole) Query(ctx context.Context, params schema.UserRoleQueryParam, 
 	if v := params.InUserIDs; len(v) > 0 {
 		db = db.Where("a.user_id IN (?)", v)
 	}
-	if v := params.UserID; len(v) > 0 {
+	if v := params.UserID; v > 0 {
 		db = db.Where("a.user_id = ?", v)
 	}
-	if v := params.RoleID; len(v) > 0 {
+	if v := params.RoleID; v > 0 {
 		db = db.Where("a.role_id = ?", v)
 	}
 
@@ -92,17 +93,17 @@ func (a *UserRole) Update(ctx context.Context, item *schema.UserRole) error {
 }
 
 // Delete the specified user role from the database.
-func (a *UserRole) Delete(ctx context.Context, id string) error {
+func (a *UserRole) Delete(ctx context.Context, id int64) error {
 	result := GetUserRoleDB(ctx, a.DB).Where("id=?", id).Delete(new(schema.UserRole))
 	return errors.WithStack(result.Error)
 }
 
-func (a *UserRole) DeleteByUserID(ctx context.Context, userID string) error {
+func (a *UserRole) DeleteByUserID(ctx context.Context, userID int64) error {
 	result := GetUserRoleDB(ctx, a.DB).Where("user_id=?", userID).Delete(new(schema.UserRole))
 	return errors.WithStack(result.Error)
 }
 
-func (a *UserRole) DeleteByRoleID(ctx context.Context, roleID string) error {
+func (a *UserRole) DeleteByRoleID(ctx context.Context, roleID int64) error {
 	result := GetUserRoleDB(ctx, a.DB).Where("role_id=?", roleID).Delete(new(schema.UserRole))
 	return errors.WithStack(result.Error)
 }

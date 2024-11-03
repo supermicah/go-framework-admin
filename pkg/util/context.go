@@ -2,9 +2,11 @@ package util
 
 import (
 	"context"
+	"strconv"
+
+	"gorm.io/gorm"
 
 	"github.com/supermicah/go-framework-admin/pkg/encoding/json"
-	"gorm.io/gorm"
 )
 
 type (
@@ -50,16 +52,16 @@ func FromRowLock(ctx context.Context) bool {
 	return v != nil && v.(bool)
 }
 
-func NewUserID(ctx context.Context, userID string) context.Context {
+func NewUserID(ctx context.Context, userID int64) context.Context {
 	return context.WithValue(ctx, userIDCtx{}, userID)
 }
 
-func FromUserID(ctx context.Context) string {
+func FromUserID(ctx context.Context) int64 {
 	v := ctx.Value(userIDCtx{})
 	if v != nil {
-		return v.(string)
+		return v.(int64)
 	}
-	return ""
+	return -1
 }
 
 func NewUserToken(ctx context.Context, userToken string) context.Context {
@@ -83,9 +85,20 @@ func FromIsRootUser(ctx context.Context) bool {
 	return v != nil && v.(bool)
 }
 
-// Set user cache object
+// UserCache Set user cache object
 type UserCache struct {
-	RoleIDs []string `json:"rids"`
+	RoleIDs []int64 `json:"rids"`
+}
+
+func (a UserCache) ToRoleIDsStr() []string {
+	result := make([]string, 0)
+	if len(a.RoleIDs) == 0 {
+		return result
+	}
+	for _, v := range a.RoleIDs {
+		result = append(result, strconv.FormatInt(v, 10))
+	}
+	return result
 }
 
 func ParseUserCache(s string) UserCache {

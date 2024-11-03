@@ -10,6 +10,10 @@ import (
 
 	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"go.uber.org/zap"
+
 	"github.com/supermicah/go-framework-admin/internal/config"
 	"github.com/supermicah/go-framework-admin/internal/utility/prom"
 	"github.com/supermicah/go-framework-admin/internal/wirex"
@@ -17,9 +21,6 @@ import (
 	"github.com/supermicah/go-framework-admin/pkg/logging"
 	"github.com/supermicah/go-framework-admin/pkg/middleware"
 	"github.com/supermicah/go-framework-admin/pkg/util"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
-	"go.uber.org/zap"
 )
 
 func startHTTPServer(ctx context.Context, injector *wirex.Injector) (func(), error) {
@@ -180,7 +181,7 @@ func useHTTPMiddlewares(_ context.Context, e *gin.Engine, injector *wirex.Inject
 			return injector.M.RBAC.Casbinx.GetEnforcer()
 		},
 		GetSubjects: func(c *gin.Context) []string {
-			return util.FromUserCache(c.Request.Context()).RoleIDs
+			return util.FromUserCache(c.Request.Context()).ToRoleIDsStr()
 		},
 	}))
 
