@@ -16,7 +16,7 @@ const (
 
 // Role management for RBAC
 type Role struct {
-	ID          int64     `json:"id" gorm:"size:20;primarykey;autoIncrement;"` // Unique ID
+	ID          int64     `json:"id" gorm:"size:64;primarykey;autoIncrement;"` // Unique ID
 	Code        string    `json:"code" gorm:"size:32;index;"`                  // Code of role (unique)
 	Name        string    `json:"name" gorm:"size:128;index"`                  // Display name of role
 	Description string    `json:"description" gorm:"size:1024"`                // Details about role

@@ -18,7 +18,7 @@ const (
 
 // User management for RBAC
 type User struct {
-	ID        int64     `json:"id" gorm:"size:20;primarykey;autoIncrement;"` // Unique ID
+	ID        int64     `json:"id" gorm:"size:64;primarykey;autoIncrement;"` // Unique ID
 	Username  string    `json:"username" gorm:"size:64;index"`               // Username for login
 	Name      string    `json:"name" gorm:"size:64;index"`                   // Name of user
 	Password  string    `json:"-" gorm:"size:64;"`                           // Password for login (encrypted)

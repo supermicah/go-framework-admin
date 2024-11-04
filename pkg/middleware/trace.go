@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/supermicah/go-framework-admin/pkg/logging"
-	"github.com/supermicah/go-framework-admin/pkg/util"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/xid"
+
+	"github.com/supermicah/go-framework-admin/pkg/logging"
+	"github.com/supermicah/go-framework-admin/pkg/util"
 )
 
 type TraceConfig struct {

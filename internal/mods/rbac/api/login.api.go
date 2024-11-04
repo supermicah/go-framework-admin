@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/biz"
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/schema"
 	"github.com/supermicah/go-framework-admin/pkg/util"

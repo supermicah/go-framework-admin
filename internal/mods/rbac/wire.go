@@ -2,6 +2,7 @@ package rbac
 
 import (
 	"github.com/google/wire"
+
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/api"
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/biz"
 	"github.com/supermicah/go-framework-admin/internal/mods/rbac/dal"

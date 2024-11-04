@@ -4,11 +4,12 @@ import (
 	"context"
 	"fmt"
 
+	"gorm.io/gorm"
+
 	rbacSchema "github.com/supermicah/go-framework-admin/internal/mods/rbac/schema"
 	"github.com/supermicah/go-framework-admin/internal/mods/sys/schema"
 	"github.com/supermicah/go-framework-admin/pkg/errors"
 	"github.com/supermicah/go-framework-admin/pkg/util"
-	"gorm.io/gorm"
 )
 
 // GetLoggerDB Get logger storage instance

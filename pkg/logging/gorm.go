@@ -8,10 +8,10 @@ import (
 )
 
 type Logger struct {
-	ID        int64     `gorm:"size:20;primaryKey;autoIncrement;" json:"id"` // Unique ID
+	ID        int64     `gorm:"size:64;primaryKey;autoIncrement;" json:"id"` // Unique ID
 	Level     string    `gorm:"size:20;index;" json:"level"`                 // Log level
 	TraceID   string    `gorm:"size:64;index;" json:"trace_id"`              // Trace ID
-	UserID    int64     `gorm:"size:20;index;" json:"user_id"`               // User ID
+	UserID    int64     `gorm:"size:64;index;" json:"user_id"`               // User ID
 	Tag       string    `gorm:"size:32;index;" json:"tag"`                   // Log tag
 	Message   string    `gorm:"size:1024;" json:"message"`                   // Log message
 	Stack     string    `gorm:"type:text;" json:"stack"`                     // Error stack

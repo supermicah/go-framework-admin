@@ -9,9 +9,9 @@ import (
 
 // UserRole User roles for RBAC
 type UserRole struct {
-	ID        int64     `json:"id" gorm:"size:20;primarykey;autoIncrement;"` // Unique ID
-	UserID    int64     `json:"user_id" gorm:"size:20;index"`                // From User.ID
-	RoleID    int64     `json:"role_id" gorm:"size:20;index"`                // From Role.ID
+	ID        int64     `json:"id" gorm:"size:64;primarykey;autoIncrement;"` // Unique ID
+	UserID    int64     `json:"user_id" gorm:"size:64;index"`                // From User.ID
+	RoleID    int64     `json:"role_id" gorm:"size:64;index"`                // From Role.ID
 	CreatedAt time.Time `json:"created_at" gorm:"index;"`                    // Create time
 	UpdatedAt time.Time `json:"updated_at" gorm:"index;"`                    // Update time
 	RoleName  string    `json:"role_name" gorm:"<-:false;-:migration;"`      // From Role.Name

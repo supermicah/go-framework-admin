@@ -29,7 +29,7 @@ var (
 
 // Menu management for RBAC
 type Menu struct {
-	ID          int64         `json:"id" gorm:"size:20;primarykey;autoIncrement;"` // Unique ID
+	ID          int64         `json:"id" gorm:"size:64;primarykey;autoIncrement;"` // Unique ID
 	Code        string        `json:"code" gorm:"size:32;index;"`                  // Code of menu (unique for each level)
 	Name        string        `json:"name" gorm:"size:128;index"`                  // Display name of menu
 	Description string        `json:"description" gorm:"size:1024"`                // Details about menu
@@ -38,7 +38,7 @@ type Menu struct {
 	Path        string        `json:"path" gorm:"size:255;"`                       // Access path of menu
 	Properties  string        `json:"properties" gorm:"type:text;"`                // Properties of menu (JSON)
 	Status      string        `json:"status" gorm:"size:20;index"`                 // Status of menu (enabled, disabled)
-	ParentID    int64         `json:"parent_id" gorm:"size:20;index;"`             // Parent ID (From Menu.ID)
+	ParentID    int64         `json:"parent_id" gorm:"size:64;index;"`             // Parent ID (From Menu.ID)
 	ParentPath  string        `json:"parent_path" gorm:"size:255;index;"`          // Parent path (split by .)
 	Children    *Menus        `json:"children" gorm:"-"`                           // Child menus
 	CreatedAt   time.Time     `json:"created_at" gorm:"index;"`                    // Create time

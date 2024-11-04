@@ -6,10 +6,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/supermicah/go-framework-admin/internal/config"
-	"github.com/supermicah/go-framework-admin/internal/wirex"
 	"github.com/gavv/httpexpect/v2"
 	"github.com/gin-gonic/gin"
+
+	"github.com/supermicah/go-framework-admin/internal/config"
+	"github.com/supermicah/go-framework-admin/internal/wirex"
 )
 
 const (

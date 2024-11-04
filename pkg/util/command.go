@@ -7,8 +7,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/supermicah/go-framework-admin/pkg/logging"
 	"go.uber.org/zap"
+
+	"github.com/supermicah/go-framework-admin/pkg/logging"
 )
 
 // The Run function sets up a signal handler and executes a handler function until a termination signal
