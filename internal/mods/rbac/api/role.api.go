@@ -32,7 +32,6 @@ func (a *Role) Query(c *gin.Context) {
 		util.ResError(c, err)
 		return
 	}
-
 	result, err := a.RoleBIZ.Query(ctx, params)
 	if err != nil {
 		util.ResError(c, err)

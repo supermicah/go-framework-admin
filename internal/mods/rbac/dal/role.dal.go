@@ -34,6 +34,9 @@ func (a *Role) Query(ctx context.Context, params schema.RoleQueryParam, opts ...
 	if v := params.LikeName; len(v) > 0 {
 		db = db.Where("name LIKE ?", "%"+v+"%")
 	}
+	if v := params.LikeCode; len(v) > 0 {
+		db = db.Where("code LIKE ?", "%"+v+"%")
+	}
 	if v := params.Status; len(v) > 0 {
 		db = db.Where("status = ?", v)
 	}

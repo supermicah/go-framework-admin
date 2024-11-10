@@ -35,6 +35,7 @@ func (a *Role) TableName() string {
 type RoleQueryParam struct {
 	util.PaginationParam
 	LikeName    string     `form:"name"`                                       // Display name of role
+	LikeCode    string     `form:"code"`                                       // Display code of role
 	Status      string     `form:"status" binding:"oneof=disabled enabled ''"` // Status of role (disabled, enabled)
 	ResultType  string     `form:"resultType"`                                 // Result type (options: select)
 	InIDs       []int64    `form:"-"`                                          // ID list
