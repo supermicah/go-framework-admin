@@ -2,6 +2,7 @@ package dal
 
 import (
 	"context"
+	"strings"
 
 	"gorm.io/gorm"
 
@@ -41,7 +42,7 @@ func (a *Menu) Query(ctx context.Context, params schema.MenuQueryParam, opts ...
 	if v := params.ParentID; v > 0 {
 		db = db.Where("parent_id = ?", v)
 	}
-	if v := params.ParentPathPrefix; len(v) > 0 {
+	if v := params.ParentPathPrefix; len(v) > 0 && !strings.EqualFold(v, "0.") {
 		db = db.Where("parent_path LIKE ?", v+"%")
 	}
 	if v := params.Code; len(v) > 0 {
