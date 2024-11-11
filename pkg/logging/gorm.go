@@ -1,6 +1,8 @@
 package logging
 
 import (
+	"fmt"
+	"reflect"
 	"time"
 
 	jsoniter "github.com/json-iterator/go"
@@ -60,8 +62,17 @@ func (h *GormHook) Exec(extra map[string]string, b []byte) error {
 		delete(data, "trace_id")
 	}
 	if v, ok := data["user_id"]; ok {
-		msg.UserID = v.(int64)
-		delete(data, "user_id")
+		switch t := v.(type) {
+		case float64:
+			msg.UserID = int64(t)
+		case int64:
+			msg.UserID = t
+		default:
+			fmt.Printf("GormHook.Exec user_id type not match, orginal type：%s\n", reflect.TypeOf(v).String())
+		}
+		if msg.UserID > 0 {
+			delete(data, "user_id")
+		}
 	}
 	if v, ok := data["level"]; ok {
 		msg.Level = v.(string)

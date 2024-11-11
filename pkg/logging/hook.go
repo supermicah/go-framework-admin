@@ -2,6 +2,7 @@ package logging
 
 import (
 	"fmt"
+	"runtime"
 	"sync"
 	"sync/atomic"
 )
@@ -17,21 +18,21 @@ type hookOptions struct {
 	extra      map[string]string
 }
 
-// Set the number of buffers
+// SetHookMaxJobs Set the number of buffers
 func SetHookMaxJobs(maxJobs int) HookOption {
 	return func(o *hookOptions) {
 		o.maxJobs = maxJobs
 	}
 }
 
-// Set the number of worker threads
+// SetHookMaxWorkers Set the number of worker threads
 func SetHookMaxWorkers(maxWorkers int) HookOption {
 	return func(o *hookOptions) {
 		o.maxWorkers = maxWorkers
 	}
 }
 
-// Set extended parameters
+// SetHookExtra Set extended parameters
 func SetHookExtra(extra map[string]string) HookOption {
 	return func(o *hookOptions) {
 		o.extra = extra
@@ -41,7 +42,7 @@ func SetHookExtra(extra map[string]string) HookOption {
 // HookOption a hook parameter options
 type HookOption func(*hookOptions)
 
-// Creates a hook to be added to an instance of logger
+// NewHook Creates a hook to be added to an instance of logger
 func NewHook(exec HookExecuter, opt ...HookOption) *Hook {
 	opts := &hookOptions{
 		maxJobs:    1024,
@@ -80,7 +81,9 @@ func (h *Hook) dispatch() {
 			defer func() {
 				h.wg.Done()
 				if r := recover(); r != nil {
-					fmt.Println("Recovered from panic in logger hook:", r)
+					buf := make([]byte, 1<<16)
+					n := runtime.Stack(buf, false)
+					fmt.Printf("Recovered from panic in logger hook: %+v\nStack trace:\n%s", r, buf[:n])
 				}
 			}()
 
@@ -110,7 +113,7 @@ func (h *Hook) Write(p []byte) (int, error) {
 	return len(p), nil
 }
 
-// Waits for the log queue to be empty
+// Flush Waits for the log queue to be empty
 func (h *Hook) Flush() {
 	if atomic.LoadInt32(&h.closed) == 1 {
 		return

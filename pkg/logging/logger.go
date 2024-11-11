@@ -57,14 +57,14 @@ func NewUserID(ctx context.Context, userID int64) context.Context {
 	return context.WithValue(ctx, ctxUserIDKey{}, userID)
 }
 
-func FromUserID(ctx context.Context) string {
+func FromUserID(ctx context.Context) int64 {
 	v := ctx.Value(ctxUserIDKey{})
 	if v != nil {
-		if s, ok := v.(string); ok {
+		if s, ok := v.(int64); ok {
 			return s
 		}
 	}
-	return ""
+	return 0
 }
 
 func NewTag(ctx context.Context, tag string) context.Context {
@@ -100,8 +100,8 @@ func Context(ctx context.Context) *zap.Logger {
 	if v := FromTraceID(ctx); v != "" {
 		fields = append(fields, zap.String("trace_id", v))
 	}
-	if v := FromUserID(ctx); v != "" {
-		fields = append(fields, zap.String("user_id", v))
+	if v := FromUserID(ctx); v > 0 {
+		fields = append(fields, zap.Int64("user_id", v))
 	}
 	if v := FromTag(ctx); v != "" {
 		fields = append(fields, zap.String("tag", v))
