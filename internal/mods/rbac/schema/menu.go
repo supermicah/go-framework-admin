@@ -60,6 +60,7 @@ type MenuQueryParam struct {
 	Status           string  `form:"-"`                // Status of menu (disabled, enabled)
 	ParentID         int64   `form:"-"`                // Parent ID (From Menu.ID)
 	ParentPathPrefix string  `form:"-"`                // Parent path (split by .)
+	Code             string  `form:"-"`                // Code (like xxx)
 	UserID           int64   `form:"-"`                // User ID
 	RoleID           int64   `form:"-"`                // Role ID
 }

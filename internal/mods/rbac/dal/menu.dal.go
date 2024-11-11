@@ -44,6 +44,9 @@ func (a *Menu) Query(ctx context.Context, params schema.MenuQueryParam, opts ...
 	if v := params.ParentPathPrefix; len(v) > 0 {
 		db = db.Where("parent_path LIKE ?", v+"%")
 	}
+	if v := params.Code; len(v) > 0 {
+		db = db.Where("code = ?", v)
+	}
 	if v := params.UserID; v > 0 {
 		userRoleQuery := GetUserRoleDB(ctx, a.DB).Where("user_id = ?", v).Select("role_id")
 		roleMenuQuery := GetRoleMenuDB(ctx, a.DB).Where("role_id IN (?)", userRoleQuery).Select("menu_id")

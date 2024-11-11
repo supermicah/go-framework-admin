@@ -3,8 +3,9 @@ package main
 import (
 	"os"
 
-	"github.com/supermicah/go-framework-admin/cmd"
 	"github.com/urfave/cli/v2"
+
+	"github.com/supermicah/go-framework-admin/cmd"
 )
 
 // VERSION Usage: go build -ldflags "-X main.VERSION=x.x.x"

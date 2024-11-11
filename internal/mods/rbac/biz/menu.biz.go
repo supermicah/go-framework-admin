@@ -203,15 +203,20 @@ func (a *Menu) Query(ctx context.Context, params schema.MenuQueryParam) (*schema
 func (a *Menu) fillQueryParam(ctx context.Context, params *schema.MenuQueryParam) error {
 	if params.CodePath != "" {
 		var (
-			codes    []string
 			lastMenu schema.Menu
 		)
-		for _, code := range strings.Split(params.CodePath, util.TreePathDelimiter) {
+		codes := strings.Split(params.CodePath, util.TreePathDelimiter)
+		length := len(codes)
+		for i := 0; i < length; i++ {
+			code := codes[i]
 			if code == "" {
 				continue
 			}
-			codes = append(codes, code)
-			menu, err := a.MenuDAL.GetByCodeAndParentID(ctx, code, lastMenu.ParentID, schema.MenuQueryOptions{
+			if i == length-1 {
+				params.Code = code
+				continue
+			}
+			menu, err := a.MenuDAL.GetByCodeAndParentID(ctx, code, lastMenu.ID, schema.MenuQueryOptions{
 				QueryOptions: util.QueryOptions{
 					SelectFields: []string{"id", "parent_id", "parent_path"},
 				},
