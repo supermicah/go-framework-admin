@@ -1,5 +1,5 @@
 [General]
-AppName = "goframeworkadmin"
+AppName = "go-framework-admin"
 Version = "v1.0.0"
 Debug = true
 PprofAddr = "" # Pprof monitor address, "localhost:6060"
@@ -46,13 +46,13 @@ DB = 1
 Debug = true
 # SQLite3 DSN
 Type = "sqlite3" # sqlite3/mysql/postgres
-DSN = "data/goframeworkadmin.db"
+DSN = "data/go-framework-admin.db"
 # MySQL DSN
 # Type = "mysql" # sqlite3/mysql/postgres
-# DSN = "root:123@tcp(127.0.0.1:3306)/goframeworkadmin?charset=utf8mb4&parseTime=True&loc=Local"
+# DSN = "root:123@tcp(127.0.0.1:3306)/go-framework-admin?charset=utf8mb4&parseTime=True&loc=Local"
 # PostgreSQL DSN
 # Type = "postgres" # sqlite3/mysql/postgres
-# DSN = "host=db user=postgres password=123456 dbname=goframeworkadmin port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+# DSN = "host=db user=postgres password=123456 dbname=go-framework-admin port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 MaxLifetime = 86400
 MaxIdleTime = 3600
 MaxOpenConns = 100

@@ -1,5 +1,5 @@
 {
-    "name": "goframeworkadmin",
+    "name": "go-framework-admin",
     "dockerComposeFile": "docker-compose.yml",
     "service": "app",
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",

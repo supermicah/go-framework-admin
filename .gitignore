@@ -13,7 +13,7 @@
 
 *.DS_Store
 /go-framework-admin
-/goframeworkadmin.lock
+/go-framework-admin.lock
 /release
 /data
 /internal/test/data
